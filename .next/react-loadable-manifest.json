@@ -1,0 +1,16 @@
+{
+  "..\\components\\shared\\cards\\CardEarning.jsx -> react-apexcharts": {
+    "id": "o+DJ",
+    "files": [
+      "static/chunks/6c44d60f.bc4df5d80bc64088cb2f.js",
+      "static/chunks/8.844b04158f18dc42de3c.js"
+    ]
+  },
+  "..\\components\\shared\\cards\\CardSaleReport.jsx -> react-apexcharts": {
+    "id": "o+DJ",
+    "files": [
+      "static/chunks/6c44d60f.bc4df5d80bc64088cb2f.js",
+      "static/chunks/8.844b04158f18dc42de3c.js"
+    ]
+  }
+}
