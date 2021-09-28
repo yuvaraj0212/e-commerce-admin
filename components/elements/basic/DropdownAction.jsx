@@ -1,14 +1,56 @@
 import React from 'react';
-import { Dropdown, Menu } from 'antd';
+import { Form, Input, notification, Button } from 'antd';
+import { Dropdown, Menu ,} from 'antd';
 
-const DropdownAction = () => {
+const DropdownAction = (props) => {
+    console.log(props);
+    const editeItem=(index)=>{
+        console.log(index);
+    }
+    const edte = (
+        <Menu>
+            <Menu.Item >
+
+            </Menu.Item>
+                <Input type="text" />
+            <Menu.Item >
+                
+            </Menu.Item>
+
+            <Menu.Item >
+                
+            </Menu.Item>
+
+            <Menu.Item >
+                
+            </Menu.Item>
+
+            <Menu.Item >
+                
+            </Menu.Item>
+
+            <Menu.Item >
+                
+            </Menu.Item>
+
+            <Menu.Item >
+                
+            </Menu.Item>
+
+            <Menu.Item >
+                
+            </Menu.Item>
+        </Menu>
+    );
     const menuView = (
         <Menu>
             <Menu.Item key={0}>
+                <button onClick={editeItem(props.data)}>
                 <a className="dropdown-item" href="#">
                     <i className="icon-pencil mr-2"></i>
                     Edit
                 </a>
+                </button>
             </Menu.Item>
             <Menu.Item key={0}>
                 <a className="dropdown-item" href="#">

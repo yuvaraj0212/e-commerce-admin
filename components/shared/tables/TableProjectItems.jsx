@@ -1,16 +1,17 @@
 import React,{useState, useEffect }  from 'react';
 import DropdownAction from '~/components/elements/basic/DropdownAction';
 import axios from "axios";
+import moment from "moment";
 
 const TableProjectItems = () => {
-    const [productItems, setproductItems]  = useState([]);
+    const [productItems, setProductItems]  = useState([]);
 
     useEffect(() => {
         axios.get("http://localhost:8899/product/product-list").then(res=>{
             console.log(res.data);
-            setproductItems(res.data.result)
+            setProductItems(res.data.result)
     })
-    })
+    },[])
 
     const tableItems = productItems.map((item, index) => {
         let badgeView;
@@ -22,6 +23,7 @@ const TableProjectItems = () => {
         return (
             <tr key={index}>
                 <td>{index + 1}</td>
+                <td><img src={item.imageURL} style={{width:'50px'}}/></td>
                 <td>
                     <a href="#">
                         <strong>{item.name}</strong>
@@ -42,9 +44,9 @@ const TableProjectItems = () => {
                         ))}
                     </p> */}
                 </td>
-                <td>{item.createDate}</td>
+                <td>{moment(item.createDate).format("MMMM Do YYYY, h:mm:ss a")}</td>
                 <td>
-                    <DropdownAction />
+                    <DropdownAction data={item}/>
                 </td>
             </tr>
         );
@@ -55,6 +57,7 @@ const TableProjectItems = () => {
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Product Image</th>
                         <th>Product Name</th>
                         <th>description</th>
                         <th>Filename</th>
