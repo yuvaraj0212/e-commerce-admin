@@ -1,131 +1,52 @@
-import React from 'react';
+import React,{useState, useEffect }  from 'react';
 import DropdownAction from '~/components/elements/basic/DropdownAction';
+import axios from "axios";
+import moment from "moment";
 
 const TableProjectItems = () => {
-    const productItems = [
-        {
-            name: 'Herschel Leather Duffle Bag In Brown Color',
-            sku: 'AB123456789-1',
-            stock: 'true',
-            price: '£125.30',
-            date: '2019/11/06',
-            categories: [
-                {
-                    name: 'Bags',
-                },
-                {
-                    name: 'Clothing & Apparel',
-                },
-            ],
-        },
-        {
-            name: 'Apple iPhone Retina 6s Plus 64GB',
-            sku: 'CD987654316-1',
-            stock: 'true',
-            price: '£1,249.99',
-            date: '2018/12/11',
-            categories: [
-                {
-                    name: 'Computers & Technologies',
-                },
-                {
-                    name: 'Technologies',
-                },
-            ],
-        },
-        {
-            name: 'Marshall Kilburn Portable Wireless Speaker',
-            sku: 'SF1133569600-1',
-            stock: 'true',
-            price: '£36.78',
-            date: '2018/12/11',
-            categories: [
-                {
-                    name: 'Babies & Moms',
-                },
-                {
-                    name: 'Refrigerators',
-                },
-            ],
-        },
-        {
-            name: 'Xbox One Wireless Controller Black Color',
-            sku: 'AB123456788',
-            stock: 'false',
-            price: '£55.30',
-            date: '2018/12/11',
-            categories: [
-                {
-                    name: 'Accessories',
-                },
-                {
-                    name: 'Air Conditioners',
-                },
-            ],
-        },
-        {
-            name: 'Grand Slam Indoor Of Show Jumping Novel',
-            sku: 'AB1234567899',
-            stock: 'false',
-            price: '£32.39',
-            date: '2018/12/11',
-            categories: [
-                {
-                    name: 'Books & Office',
-                },
-                {
-                    name: 'Cars & Motocycles',
-                },
-            ],
-        },
-        {
-            name: 'Rayban Rounded Sunglass Brown Color',
-            sku: 'AB123456783',
-            stock: 'true',
-            price: '£321.39',
-            date: '2018/12/11',
-            categories: [
-                {
-                    name: 'Clothing & Apparel',
-                },
-                {
-                    name: 'Cars & Motocycles',
-                },
-            ],
-        },
-    ];
+    const [productItems, setProductItems]  = useState([]);
+
+    useEffect(() => {
+        axios.get("http://localhost:8899/product/product-list").then(res=>{
+            console.log(res.data);
+            setProductItems(res.data.result)
+    })
+    },[])
+
     const tableItems = productItems.map((item, index) => {
         let badgeView;
-        if (item.stock) {
+        if (item) {
             badgeView = <span className="ps-badge success">Stock</span>;
         } else {
             badgeView = <span className="ps-badge gray">Out of stock</span>;
         }
         return (
-            <tr key={item.sku}>
+            <tr key={index}>
                 <td>{index + 1}</td>
+                <td><img src={item.imageURL} style={{width:'50px'}}/></td>
                 <td>
                     <a href="#">
                         <strong>{item.name}</strong>
                     </a>
                 </td>
-                <td>{item.sku}</td>
-                <td>{badgeView}</td>
+                <td>{item.details}</td>
+                <td>{item.filename}</td>
                 <td>
                     <strong>{item.price}</strong>
                 </td>
                 <td>
-                    <p className="ps-item-categories">
-                        {item.categories.map((cat) => (
+                    {item.category.name}
+                    {/* <p className="ps-item-categories">
+                        {item.category.map((cat) => (
                             <a href="#" key={cat.name}>
                                 {cat.name}
                             </a>
                         ))}
-                    </p>
+                    </p> */}
                 </td>
-                <td>{item.date}</td>
+                <td>{moment(item.createDate).format("MMMM Do YYYY, h:mm:ss a")}</td>
                 <td>
-                    <DropdownAction />
+                    <DropdownAction data={item}/>
                 </td>
             </tr>
         );
@@ -136,9 +57,10 @@ const TableProjectItems = () => {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
-                        <th>SKU</th>
-                        <th>Stock</th>
+                        <th>Product Image</th>
+                        <th>Product Name</th>
+                        <th>description</th>
+                        <th>Filename</th>
                         <th>Price</th>
                         <th>Categories</th>
                         <th>Date</th>
