@@ -4,23 +4,43 @@ import ContainerDefault from '~/components/layouts/ContainerDefault';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
-import { Form, Input, notification, Button, Select ,Upload} from 'antd';
+import { Form, Input, notification, Button,Select,Upload } from 'antd';
 import axios from 'axios';
 
 
-const CreateProductPage = () => {
+
+const editeProductPage = () => {
     const [categorylist, setCategorylist] = useState([]);
+    const [key, setKey] = useState([]);
+    const [form] = Form.useForm();
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(toggleDrawerMenu(false));
+        setKey(JSON.parse(sessionStorage.getItem("edite")))
         axios.get('http://localhost:8899/category/category-list').then((res) => {
             console.log(res);
             setCategorylist(res.data.result);
         })
     }, []);
+    form.setFieldsValue({
+        productName:key.name,
+        productCode:key.code,
+        price:key.price,
+        details:key.details,
+        mfile:key.imageURL,
+        discount:key.discount,
+        description:key.description,
+        // category:key.category
+      });
+    console.log(key);
+    console.log(key.id);
+    var we =key.category;
+    console.log(we)
     const handelsubmit = (value) => {
         console.log(value);
+        console.log(key.id);
         const loginFormData = new FormData();
+        loginFormData.append("productId", key.id);
         loginFormData.append("productName", value.productName);
         loginFormData.append("productCode", value.productCode);
         loginFormData.append("price", value.price);
@@ -32,7 +52,7 @@ const CreateProductPage = () => {
         console.log(loginFormData);
         axios({
             method: 'post',
-            url: 'http://localhost:8899/product/create-product',
+            url: ' http://localhost:8899/product/update-product',
             data: loginFormData,
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then((res) => {
@@ -44,23 +64,21 @@ const CreateProductPage = () => {
                     description: 'This feature has been updated later!',
                 });
                 return Router.push('/products');
+            } else {
             }
-        })
-            .catch((err) => {
-                console.log(err);
+        }).catch((err) => {
+            console.log(err);
 
-                notification.warn({
-                    message: "added unseccusfull",
-                    description: 'This feature has been updated later!',
-                    
-                    
-                })
-            }
-            )
+            notification.warn({
+                message: "update unseccusfull",
+                description: 'This feature has been updated later!',
+            })
+        }
+        )
     }
-    const { Option } = Select;
-    console.log("category ", categorylist);
+
     return (
+        
         <ContainerDefault title="Create new product">
             <HeaderDashboard
                 title="Create Product"
@@ -69,18 +87,33 @@ const CreateProductPage = () => {
             <section className="ps-new-item">
                 <Form
                     className="ps-form ps-form--new-product"
+                    // initialValues={{
+                    //     remember: true,
+                    // }}
+                    form={form} 
                     onFinish={handelsubmit}
                 >
                     <div className="ps-form__content">
                         <div className="row">
                             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <figure className="ps-block--form-box">
-                                    <figcaption>General</figcaption>
+                                    <figcaption>Edite Product</figcaption>
                                     <div className="ps-block__content w-md-75 ">
+                                        {/* <div className="form-group w-md-75">
+                                            <Form.Item
+                                                name="id"
+                                                initialvalues ={key.id}
+                                                value={we}
+                                            >
+                                                <Input
+                                                // ref={inputRef}
+                                               
+                                                />
+                                            </Form.Item>
+                                        </div> */}
                                         <div className="form-group w-md-75">
                                             <Form.Item
                                                 name="productName"
-
                                                 rules={[
                                                     {
                                                         required: true,
@@ -120,7 +153,6 @@ const CreateProductPage = () => {
                                         <div className="form-group">
                                             <Form.Item
                                                 name="price"
-
                                                 rules={[
                                                     {
                                                         required: true,
@@ -139,7 +171,6 @@ const CreateProductPage = () => {
                                         <div className="form-group">
                                             <Form.Item
                                                 name="details"
-
                                                 rules={[
                                                     {
                                                         required: true,
@@ -222,7 +253,7 @@ const CreateProductPage = () => {
                                         <div className="form-group text-center">
                                             <Form.Item
                                                 name="mfile"
-
+                                                type="file"
                                                 rules={[
                                                     {
                                                         required: true,
@@ -246,7 +277,7 @@ const CreateProductPage = () => {
                         </div>
                     </div>
                     <div className="ps-form__bottom">
-                        <a onClick={() => { return Router.back() }}
+                        <a onClick={()=> Router.push('/products')}
                             className="ps-btn ps-btn--black"
                             href="products.html">
                             Back
@@ -259,4 +290,4 @@ const CreateProductPage = () => {
         </ContainerDefault >
     );
 };
-export default connect((state) => state.app)(CreateProductPage);
+export default connect((state) => state.app)(editeProductPage);
