@@ -9,7 +9,7 @@ const TableCustomerItems = () => {
             console.log(res.data);
             setcustomers(res.data.result)
     })
-    })
+    },[])
     const tableItemsView = customers.map((item, index) => {
         let badgeView;
 
@@ -28,9 +28,9 @@ const TableCustomerItems = () => {
                 <td>{item.email}</td>
                 <td>{item.phone}</td>
                 <td>{item.roles[0].rolename}</td>
-                <td>
+                {/* <td>
                     <DropdownAction />
-                </td>
+                </td> */}
             </tr>
         );
     });

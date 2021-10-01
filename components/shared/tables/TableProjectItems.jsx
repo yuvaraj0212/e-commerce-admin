@@ -1,18 +1,55 @@
-import React,{useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 import DropdownAction from '~/components/elements/basic/DropdownAction';
 import axios from "axios";
 import moment from "moment";
+import { Dropdown, Menu, notification } from 'antd';
+import { useRouter } from 'next/router';
+// import { withRouter } from 'react-router';
+// import { useHistory } from 'react-router-dom';
 
 const TableProjectItems = () => {
-    const [productItems, setProductItems]  = useState([]);
-
+    const [productItems, setProductItems] = useState([]);
+    const router = useRouter();
     useEffect(() => {
-        axios.get("http://localhost:8899/product/product-list").then(res=>{
+        productList();
+    }, [])
+    const productList = () => {
+        axios.get("http://localhost:8899/product/product-list").then(res => {
             console.log(res.data);
             setProductItems(res.data.result)
-    })
-    },[])
+        })
+    }
+    const deleteItem = (datas) => {
+        axios({
+            method: 'delete',
+            url: ' http://localhost:8899/product/delete-product?productId=' + datas,
+        }).then((res) => {
+            console.log(res);
+            console.log(res.status);
+            productList();
+            if (res.data.status === 200) {
+                notification.success({
+                    message: res.data.message,
+                    description: 'This feature has been updated later!',
+                });
+            } else {
+                console.log(res.data.message);
+                notification.warn({
+                    message: res.data.message,
+                })
+            }
+        })
+    }
 
+    const handleEdit = (event, item) => {
+        sessionStorage.setItem("category",JSON.stringify(item.category.name));
+        router.push({
+            pathname:'/products/EditProduct',
+            // asPath:"/products/EditProduct",
+            query:{data:JSON.stringify(item)}
+            // '/categories','/categories',item
+        })
+    }
     const tableItems = productItems.map((item, index) => {
         let badgeView;
         if (item) {
@@ -20,10 +57,35 @@ const TableProjectItems = () => {
         } else {
             badgeView = <span className="ps-badge gray">Out of stock</span>;
         }
+        let deleteId = item.id;
+        console.log("Id ", deleteId);
+        console.log("item ", item);
+        console.log("data ", item.data);
+        const menuView = (
+            <Menu>
+                <Menu.Item key={item}>
+                    <a className="dropdown-item" onClick={(e) => {
+                        handleEdit(e,item)
+                    }}>
+                        <i className="icon-pencil mr-2"></i>
+                        Edit
+                    </a>
+                </Menu.Item>
+                <Menu.Item key={deleteId}>
+                    <a className="dropdown-item" onClick={() => {
+                        console.log("delete ", deleteId);
+                        deleteItem(deleteId);
+                    }}>
+                        <i className="icon-trash2 mr-2"></i>
+                        Delete
+                    </a>
+                </Menu.Item>
+            </Menu>
+        );
         return (
             <tr key={index}>
                 <td>{index + 1}</td>
-                <td><img src={item.imageURL} style={{width:'50px'}}/></td>
+                <td><img src={item.imageURL} style={{ width: '50px' }} /></td>
                 <td>
                     <a href="#">
                         <strong>{item.name}</strong>
@@ -36,17 +98,18 @@ const TableProjectItems = () => {
                 </td>
                 <td>
                     {item.category.name}
-                    {/* <p className="ps-item-categories">
-                        {item.category.map((cat) => (
-                            <a href="#" key={cat.name}>
-                                {cat.name}
-                            </a>
-                        ))}
-                    </p> */}
                 </td>
                 <td>{moment(item.createDate).format("MMMM Do YYYY, h:mm:ss a")}</td>
                 <td>
-                    <DropdownAction data={item}/>
+                    {/* <DropdownAction data={item}/> */}
+
+                    <Dropdown overlay={menuView} className="ps-dropdown">
+                        <a
+                            onClick={(e) => e.preventDefault()}
+                            className="ps-dropdown__toggle">
+                            <i className="icon-ellipsis"></i>
+                        </a>
+                    </Dropdown>
                 </td>
             </tr>
         );

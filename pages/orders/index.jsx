@@ -56,11 +56,11 @@ const OrdersPage = () => {
                         </form>
                     </div>
                     <div className="ps-section__actions">
-                        <Link href="/products/create-product">
+                        {/* <Link href="/products/create-product">
                             <a className="ps-btn success">
                                 <i className="icon icon-plus mr-2"></i>New Order
                             </a>
-                        </Link>
+                        </Link> */}
                         <a
                             className="ps-btn ps-btn--gray"
                             href="new-order.html">

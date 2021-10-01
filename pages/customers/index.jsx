@@ -23,11 +23,11 @@ const CustomersPage = () => {
                     <div className="ps-section__filter">
                         <FormSearchSimple />
                     </div>
-                    <div className="ps-section__actions">
+                    {/* <div className="ps-section__actions">
                         <a className="ps-btn success" href="#">
                             <i className="icon icon-plus mr-2"></i>Add Customer
                         </a>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="ps-section__content">
                     <TableCustomerItems />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
+import  Router,{ withRouter } from 'next/router';
 import ContainerDefault from '~/components/layouts/ContainerDefault';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch } from 'react-redux';
@@ -8,19 +8,43 @@ import { Form, Input, notification, Button, Select, Upload } from 'antd';
 import axios from 'axios';
 
 
-const CreateProductPage = () => {
+
+const editeProductPage = (props) => {
+    // console.log("react", JSON.parse(props.router.query.data));
+    const [editecategory, setEditecategory] = useState('');
     const [categorylist, setCategorylist] = useState([]);
+    const [key, setKey] = useState([]);
+    const [form] = Form.useForm();
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(toggleDrawerMenu(false));
+         setEditecategory(JSON.parse(sessionStorage.getItem("category")));
+        setKey(JSON.parse(props.router.query.data));
+        // setEditecategory(key.category);
         axios.get('http://localhost:8899/category/category-list').then((res) => {
             console.log(res);
             setCategorylist(res.data.result);
+
         })
     }, []);
+    
+    console.log(key);
+    form.setFieldsValue({
+        productName: key.name,
+        productCode: key.code,
+        price: key.price,
+        details: key.details,
+        // mfile: image,
+        discount: key.discount,
+        description: key.description,
+        category: editecategory
+    });
+    console.log(key);
+  
     const handelsubmit = (value) => {
         console.log(value);
         const loginFormData = new FormData();
+        loginFormData.append("productId", key.id);
         loginFormData.append("productName", value.productName);
         loginFormData.append("productCode", value.productCode);
         loginFormData.append("price", value.price);
@@ -32,7 +56,7 @@ const CreateProductPage = () => {
         console.log(loginFormData);
         axios({
             method: 'post',
-            url: 'http://localhost:8899/product/create-product',
+            url: ' http://localhost:8899/product/update-product',
             data: loginFormData,
             headers: { 'Content-Type': 'multipart/form-data' }
         }).then((res) => {
@@ -55,9 +79,17 @@ const CreateProductPage = () => {
             }
         })
     }
-    const { Option } = Select;
-    console.log("category ", categorylist);
+    // const fileList = [
+    //     {
+    //         name: key.filename,
+    //         url: key.imageURL,
+    //         //   thumbUrl: key.imageURL,
+    //     }
+    // ];
+   
+    const Option = Select.Option;
     return (
+
         <ContainerDefault title="Create new product">
             <HeaderDashboard
                 title="Create Product"
@@ -66,18 +98,18 @@ const CreateProductPage = () => {
             <section className="ps-new-item">
                 <Form
                     className="ps-form ps-form--new-product"
+                    form={form}
                     onFinish={handelsubmit}
                 >
                     <div className="ps-form__content">
                         <div className="row">
                             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <figure className="ps-block--form-box">
-                                    <figcaption>General</figcaption>
+                                    <figcaption>Edite Product</figcaption>
                                     <div className="ps-block__content w-md-75 ">
                                         <div className="form-group w-md-75">
                                             <Form.Item
                                                 name="productName"
-
                                                 rules={[
                                                     {
                                                         required: true,
@@ -117,7 +149,6 @@ const CreateProductPage = () => {
                                         <div className="form-group">
                                             <Form.Item
                                                 name="price"
-
                                                 rules={[
                                                     {
                                                         required: true,
@@ -132,11 +163,11 @@ const CreateProductPage = () => {
 
                                                 />
                                             </Form.Item>
-                                        </div>
+                                        </div> 
+
                                         <div className="form-group">
                                             <Form.Item
                                                 name="details"
-
                                                 rules={[
                                                     {
                                                         required: true,
@@ -192,6 +223,7 @@ const CreateProductPage = () => {
                                                 />
                                             </Form.Item>
                                         </div>
+
                                         <div className="form-group">
                                             <Form.Item
                                                 name="category"
@@ -219,6 +251,7 @@ const CreateProductPage = () => {
                                         <div className="form-group text-center">
                                             <Form.Item
                                                 name="mfile"
+                                                type="file"
 
                                                 rules={[
                                                     {
@@ -228,14 +261,15 @@ const CreateProductPage = () => {
                                                     },
                                                 ]}>
                                                 <Upload
-
+                                                    
                                                     listType="picture"
-                                                    // multiple
+                                                    
                                                     className="upload-list-inline"
                                                 >
                                                     <Button >Upload Product </Button>
                                                 </Upload>
                                             </Form.Item>
+                                            {/* <img  src={key.imageURL}></img> */}
                                         </div>
                                     </div>
                                 </figure>
@@ -245,7 +279,7 @@ const CreateProductPage = () => {
                     <div className="ps-form__bottom">
                         <a onClick={() => Router.push('/products')}
                             className="ps-btn ps-btn--black"
-                         >
+                        >
                             Back
                         </a>
                         {/* <Button className="ps-btn ps-btn--gray">Cancel</Button> */}
@@ -256,4 +290,4 @@ const CreateProductPage = () => {
         </ContainerDefault >
     );
 };
-export default connect((state) => state.app)(CreateProductPage);
+export default withRouter(editeProductPage);
