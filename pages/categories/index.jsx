@@ -140,8 +140,8 @@ const CategoriesPage = () => {
             (res) => {
                 console.log(res);
                 if (res.data.status === 200) {
-                    setDescription('')
-                    setCategoryName('')
+                    // setDescription('')
+                    // setCategoryName('')
                     setCreate(true)
                     setEdit(false)
                     getCourseAllContent();
@@ -163,7 +163,7 @@ const CategoriesPage = () => {
     const showDeleteConfirm = (event, id) => {
         confirm({
             title: 'Are you sure delete this category?',
-            icon: <ExclamationCircleOutlined />,
+            // icon: <ExclamationCircleOutlined />,
             content: 'Some descriptions',
             okText: 'Yes',
             okType: 'danger',
@@ -216,7 +216,7 @@ const CategoriesPage = () => {
                                         <th>Category name</th>
                                         <th>Description</th>
                                         <th>Created at</th>
-                                        <th></th>
+                                        {/* <th>Action</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -234,14 +234,14 @@ const CategoriesPage = () => {
                                                 </td>
                                                 <td>
                                                     <Tooltip title="edit category">
-                                                        <EditTwoTone onClick={(event) =>
+                                                        <input type="button" value="Edite" onClick={(event) =>
                                                             handleRowClick(event, data)
                                                         } />
                                                     </Tooltip>
 
                                                     <Divider type="vertical" />
                                                     <Tooltip title="Delete category">
-                                                        <DeleteTwoTone onClick={(e) => showDeleteConfirm(e, data.id)} />
+                                                        <input type="button" value="Delete" onClick={(e) => showDeleteConfirm(e, data.id)} />
                                                     </Tooltip>
 
                                                 </td>

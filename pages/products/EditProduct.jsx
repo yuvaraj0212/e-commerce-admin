@@ -283,7 +283,7 @@ const editeProductPage = (props) => {
                             Back
                         </a>
                         {/* <Button className="ps-btn ps-btn--gray">Cancel</Button> */}
-                        <Button className="ps-btn" htmlType="submit">Submit</Button>
+                        <Button className="ps-btn sucess" htmlType="submit">Submit</Button>
                     </div>
                 </Form>
             </section >

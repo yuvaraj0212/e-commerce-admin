@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CardRecentOrders from '~/components/shared/cards/CardRecentOrders';
 import CardSaleReport from '~/components/shared/cards/CardSaleReport';
 import CardEarning from '~/components/shared/cards/CardEarning';
@@ -7,33 +7,18 @@ import ContainerDashboard from '~/components/layouts/ContainerDashboard';
 import { useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
 import CardTopCountries from '~/components/shared/cards/CardTopCountries';
+import Router from 'next/router';
+import LoginPage from './login';
+import { getUser } from '~/components/api/url-helper';
+import HeaderMobile from '~/components/shared/headers/HeaderMobile';
 
 const Index = () => {
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(toggleDrawerMenu(false));
-    }, []);
-
     return (
-        <ContainerDashboard title="Dashboard">
-            <section className="ps-dashboard" id="homepage">
-                <div className="ps-section__left">
-                    <div className="row">
-                        <div className="col-xl-8 col-12">
-                            <CardSaleReport />
-                        </div>
-                        <div className="col-xl-4 col-12">
-                            <CardEarning />
-                        </div>
-                    </div>
-                    <CardRecentOrders />
-                </div>
-                <div className="ps-section__right">
-                    <CardStatics />
-                    <CardTopCountries />
-                </div>
-            </section>
-        </ContainerDashboard>
+        <>
+            <LoginPage />
+        </>
+
     );
 };
 
