@@ -105,7 +105,7 @@ const editeProductPage = (props) => {
                         <div className="row">
                             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                 <figure className="ps-block--form-box">
-                                    <figcaption>Edite Product</figcaption>
+                                    <figcaption>Edit Product</figcaption>
                                     <div className="ps-block__content w-md-75 ">
                                         <div className="form-group w-md-75">
                                             <Form.Item
@@ -276,15 +276,15 @@ const editeProductPage = (props) => {
                             </div>
                         </div>
                     </div>
-                    <div className="ps-form__bottom">
-                        <a onClick={() => Router.push('/products')}
-                            className="ps-btn ps-btn--black"
-                        >
+                    <div className="ps-form__bottom ">
+                        <a onClick={() => Router.back()}
+                            className="ps-btn ps-btn--gray"
+                         >
                             Back
                         </a>
                         {/* <Button className="ps-btn ps-btn--gray">Cancel</Button> */}
-                        <Button className="ps-btn sucess" htmlType="submit">Submit</Button>
-                    </div>
+                        <button className="ps-btn success"  htmlType="submit">Submit</button>
+                    </div>  
                 </Form>
             </section >
         </ContainerDefault >
