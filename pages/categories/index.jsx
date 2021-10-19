@@ -57,7 +57,7 @@ import {
 } from '@ant-design/icons';
 import Axios from "axios";
 import moment from "moment";
-import { Form, Input, notification, Divider, Tooltip, Modal } from 'antd';
+import { Form, Input, notification, Divider, Tooltip, Modal, Upload, Button } from 'antd';
 // import TextArea from "rc-textarea";
 
 
@@ -65,7 +65,7 @@ import { Form, Input, notification, Divider, Tooltip, Modal } from 'antd';
 
 
 const CategoriesPage = () => {
-   
+    const [form] = Form.useForm();
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     const [create, setCreate] = useState(true);
@@ -74,7 +74,7 @@ const CategoriesPage = () => {
     const { confirm } = Modal;
 
 
-    
+
     useEffect(() => {
         dispatch(toggleDrawerMenu(false));
         getCourseAllContent();
@@ -94,8 +94,18 @@ const CategoriesPage = () => {
     };
 
     const handleCreateCategory = (value) => {
-        console.log("new cat  ",value);
-        Axios.post("http://localhost:8899/category/create-category", value).then(
+        console.log("new cat  ", value);
+        const loginFormData = new FormData();
+        loginFormData.append("name", value.name);
+        loginFormData.append("desc", value.desc);
+        loginFormData.append("mfile", value.mfile.file.originFileObj);
+        // Axios.post("http://localhost:8899/category/create-category", value)
+        Axios({
+            method: 'post',
+            url: 'http://localhost:8899/category/create-category',
+            data: loginFormData,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(
             (res) => {
 
                 console.log(res.data.status)
@@ -134,9 +144,19 @@ const CategoriesPage = () => {
     };
 
     const handleEditCategory = (value) => {
-        value.id=editData.id;
-        console.log("edite cate  ",value);
-        Axios.post("http://localhost:8899/category/update-category",value).then(
+        
+        const loginFormData = new FormData();
+        loginFormData.append("id", editData.id);
+        loginFormData.append("name", value.name);
+        loginFormData.append("desc", value.desc);
+        loginFormData.append("mfile", value.mfile.file.originFileObj);
+        console.log("edite cate  ", value);
+        Axios({
+            method: 'post',
+            url: 'http://localhost:8899/category/update-category',
+            data: loginFormData,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        }).then(
             (res) => {
                 console.log(res);
                 if (res.data.status === 200) {
@@ -194,8 +214,11 @@ const CategoriesPage = () => {
 
         });
     }
+    form.setFieldsValue({
+        name:editData.name,
+        desc:editData.desc,
+    })
 
-    
     return (
         <ContainerDefault>
             <HeaderDashboard
@@ -213,16 +236,18 @@ const CategoriesPage = () => {
                             <table className="table ps-table">
                                 <thead>
                                     <tr>
-                                        <th>Category name</th>
+                                        <th>Category </th>
+                                        <th>Name</th>
                                         <th>Description</th>
                                         <th>Created at</th>
                                         {/* <th>Action</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data.map((data, index) => {
+                                    {data ? data.map((data, index) => {
                                         return (
                                             <tr>
+                                                <td><img src={data.imageURL} style={{ width: '50px' }} /></td>
                                                 <td>
                                                     <strong>{data.name}</strong>
                                                 </td>
@@ -234,20 +259,20 @@ const CategoriesPage = () => {
                                                 </td>
                                                 <td>
                                                     <Tooltip title="edit category">
-                                                        <input type="button" value="Edite" onClick={(event) =>
+                                                        <input type="button" value="Edit" className="ps-btn ps-btn--gray ps-btn--sm" onClick={(event) =>
                                                             handleRowClick(event, data)
                                                         } />
                                                     </Tooltip>
 
                                                     <Divider type="vertical" />
                                                     <Tooltip title="Delete category">
-                                                        <input type="button" value="Delete" onClick={(e) => showDeleteConfirm(e, data.id)} />
+                                                        <input type="button" value="Delete" className="ps-btn ps-btn--sm" onClick={(e) => showDeleteConfirm(e, data.id)} />
                                                     </Tooltip>
 
                                                 </td>
                                             </tr>
                                         );
-                                    })}
+                                    }) : ""}
                                 </tbody>
                             </table>
                         </div>
@@ -279,7 +304,7 @@ const CategoriesPage = () => {
                                         className="form-control  w-md-75"
                                         type="text"
                                         placeholder="category name"
-                                        // onChange={(e) => handleName(e)}
+                                    // onChange={(e) => handleName(e)}
                                     />
                                 </Form.Item>
                                 <div className="form-group">
@@ -297,16 +322,35 @@ const CategoriesPage = () => {
                                             type="text"
                                             rows="6"
                                             placeholder="description"
-                                            // onChange={(e) => handleDesc(e)}
+                                        // onChange={(e) => handleDesc(e)}
                                         />
                                     </Form.Item>
                                 </div>
+                                <Form.Item
+                                    name="mfile"
+
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please input your mfile!',
+                                        },
+                                    ]}>
+                                    <Upload
+
+                                        listType="picture"
+                                        // multiple
+                                        className="upload-list-inline"
+                                    >
+                                        <Button >Upload Image </Button>
+                                    </Upload>
+                                </Form.Item>
                             </div>
                             <div className="ps-form__bottom">
                                 <button className="ps-btn ps-btn--gray" onClick={e => cancelCourse(e)}>Reset</button>
                                 <button className="ps-btn ps-btn--sumbit success" htmlType="submit"
                                 //  onClick={e => handleCreateCategory(e)}
-                                 >
+                                >
                                     Add new
                                 </button>
                             </div>
@@ -317,6 +361,7 @@ const CategoriesPage = () => {
                             className="ps-form ps-form--new"
                             id="create-course-form"
                             onFinish={handleEditCategory}
+                            form={form}
                         >
                             <div className="ps-form__content">
 
@@ -332,16 +377,16 @@ const CategoriesPage = () => {
                                         ]}
                                     >
                                         <Input
-                                            defaultValue={editData.name}
+                                            // defaultValue={editData.name}
                                             className="form-control  w-md-75"
                                             type="text"
                                             placeholder="category name"
                                         />
                                     </Form.Item>
                                 </div>
-                            
+
                                 <div className="form-group">
-                        
+
                                     <Form.Item
                                         name="desc"
                                         rules={[
@@ -352,7 +397,7 @@ const CategoriesPage = () => {
                                         ]}
                                     >
                                         <Input.TextArea
-                                            defaultValue={editData.desc}
+                                            // defaultValue={editData.desc}
                                             className="form-control  w-md-75"
                                             type="text"
                                             rows="6"
@@ -360,6 +405,25 @@ const CategoriesPage = () => {
                                         />
                                     </Form.Item>
                                 </div>
+                                <Form.Item
+                                    name="mfile"
+
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please input your mfile!',
+                                        },
+                                    ]}>
+                                    <Upload
+
+                                        listType="picture"
+                                        // multiple
+                                        className="upload-list-inline"
+                                    >
+                                        <Button >Upload Image </Button>
+                                    </Upload>
+                                </Form.Item>
                             </div>
                             <div className="ps-form__bottom">
                                 <button className="ps-btn ps-btn--gray" onClick={e => cancelCourse(e)}>Reset</button>

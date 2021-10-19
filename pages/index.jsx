@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
 import CardTopCountries from '~/components/shared/cards/CardTopCountries';
 import Router from 'next/router';
-import LoginPage from './login';
+import LoginPage from './login/index';
 import { getUser } from '~/components/api/url-helper';
 import HeaderMobile from '~/components/shared/headers/HeaderMobile';
 
@@ -16,7 +16,10 @@ const Index = () => {
     const dispatch = useDispatch();
     return (
         <>
-            <LoginPage />
+        <div className="container">
+             <LoginPage />
+        </div>
+           
         </>
 
     );

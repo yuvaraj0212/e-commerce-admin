@@ -209,10 +209,10 @@ const CreateProductPage = () => {
                                                     placeholder="Select a Category"
 
                                                 >
-                                                    {categorylist.map((list, index) => {
+                                                    {categorylist?categorylist.map((list, index) => {
                                                         return (<Option key={index} value={list.name}>{list.name}</Option>)
                                                     }
-                                                    )}
+                                                    ):""}
                                                 </Select>
                                             </Form.Item>
                                         </div>
@@ -242,14 +242,14 @@ const CreateProductPage = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="ps-form__bottom">
-                        <a onClick={() => Router.push('/products')}
-                            className="ps-btn ps-btn--black"
+                    <div className="ps-form__bottom ">
+                        <a onClick={() => Router.back()}
+                            className="ps-btn ps-btn--gray"
                          >
                             Back
                         </a>
                         {/* <Button className="ps-btn ps-btn--gray">Cancel</Button> */}
-                        <Button className="ps-btn" htmlType="submit">Submit</Button>
+                        <button className="ps-btn success"  htmlType="submit">Submit</button>
                     </div>
                 </Form>
             </section >

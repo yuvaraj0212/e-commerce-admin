@@ -99,7 +99,7 @@ class register extends Component {
                                 <div className="ps-form__content">
                                     <div className="row">
                                         <div className="offset-lg-3 col-lg-6 col-md-12 col-sm-12 col-12">
-                                            <figure className="ps-block--form-box text-center">
+                                            <figure className="ps-block--form-box mt-65 text-center">
                                                 <figcaption>REGISTER PAGE</figcaption>
                                                 <div className="ps-block__content w-md-75 container ">
                                                     <div className="form-group w-md-75">
@@ -168,13 +168,13 @@ class register extends Component {
                                                                     {
                                                                         required: true,
                                                                         message:
-                                                                            'Please input your password!',
+                                                                            'Please input your confirmPassword!',
                                                                     },
                                                                 ]}>
                                                                 <Input
                                                                     className="form-control"
                                                                     type="password"
-                                                                    placeholder="Password..."
+                                                                    placeholder="confirmPassword..."
 
                                                                 />
                                                             </Form.Item>

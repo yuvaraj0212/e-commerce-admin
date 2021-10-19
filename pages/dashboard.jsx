@@ -9,8 +9,8 @@ import { toggleDrawerMenu } from '~/store/app/action';
 import CardTopCountries from '~/components/shared/cards/CardTopCountries';
 import Router from 'next/router';
 import { getUser } from '~/components/api/url-helper';
-getUser
-const Index = () => {
+
+const dashboard = () => {
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
     useEffect(() => {
@@ -51,4 +51,4 @@ const Index = () => {
     );
 };
 
-export default Index;
+export default dashboard;
