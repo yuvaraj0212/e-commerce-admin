@@ -7,7 +7,7 @@ const MenuSidebar = () => {
     const menuItems = [
         {
             text: 'Dashboard',
-            url: '/',
+            url: '/dashboard',
             icon: 'icon-home',
         },
         {
