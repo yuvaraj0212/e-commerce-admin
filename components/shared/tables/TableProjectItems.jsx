@@ -7,8 +7,9 @@ import { useRouter } from 'next/router';
 // import { withRouter } from 'react-router';
 // import { useHistory } from 'react-router-dom';
 
-const TableProjectItems = () => {
-    const [productItems, setProductItems] = useState([]);
+const TableProjectItems = ({productItems,search}) => {
+    console.log(search);
+    // const [productItems, setProductItems] = useState([]);
     const router = useRouter();
     useEffect(() => {
         productList();
@@ -16,7 +17,7 @@ const TableProjectItems = () => {
     const productList = () => {
         axios.get("http://localhost:8899/product/product-list").then(res => {
             console.log(res.data);
-            setProductItems(res.data.result)
+            // setProductItems(res.data.result)
         })
     }
     const deleteItem = (datas) => {
@@ -50,7 +51,13 @@ const TableProjectItems = () => {
             // '/categories','/categories',item
         })
     }
-    const tableItems = productItems.map((item, index) => {
+    const tableItems = productItems.filter((item)=>{
+        if (search=='') {
+            return item;
+        } else if(item.name.toLowerCase().includes(search.toLowerCase())) {
+            return item;
+        }
+    }).map((item, index) => {
         let badgeView;
         if (item) {
             badgeView = <span className="ps-badge success">Stock</span>;

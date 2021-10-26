@@ -68,6 +68,7 @@ const CategoriesPage = () => {
     const [form] = Form.useForm();
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
+    const [searchTerm, setsearchTerm] = useState('');
     const [create, setCreate] = useState(true);
     const [edit, setEdit] = useState(false);
     const [editData, setEditdata] = useState({});
@@ -79,7 +80,6 @@ const CategoriesPage = () => {
         dispatch(toggleDrawerMenu(false));
         getCourseAllContent();
     }, []);
-
     const getCourseAllContent = async () => {
         Axios.get("http://localhost:8899/category/category-list", {
             //   headers: {
@@ -92,7 +92,6 @@ const CategoriesPage = () => {
             setData(res.data.result);
         });
     };
-
     const handleCreateCategory = (value) => {
         console.log("new cat  ", value);
         const loginFormData = new FormData();
@@ -144,7 +143,7 @@ const CategoriesPage = () => {
     };
 
     const handleEditCategory = (value) => {
-        
+
         const loginFormData = new FormData();
         loginFormData.append("id", editData.id);
         loginFormData.append("name", value.name);
@@ -215,8 +214,8 @@ const CategoriesPage = () => {
         });
     }
     form.setFieldsValue({
-        name:editData.name,
-        desc:editData.desc,
+        name: editData.name,
+        desc: editData.desc,
     })
 
     return (
@@ -228,7 +227,20 @@ const CategoriesPage = () => {
             <section className="ps-dashboard ps-items-listing">
                 <div className="ps-section__left">
                     <div className="ps-section__header">
-                        <FormSearchSimple />
+                        <form
+                            className="ps-form--search-simple"
+                            method="get">
+                            <input
+                                className="form-control"
+                                type="text"
+                                onChange={e => setsearchTerm(e.target.value)}
+                                placeholder="Search..."
+                            />
+                            <button>
+                                <i className="icon icon-magnifier"></i>
+                            </button>
+                        </form>
+                        {/* <FormSearchSimple /> */}
                     </div>
                     <div className="ps-section__content">
                         {/* <TableCategoryItems /> */}
@@ -244,9 +256,15 @@ const CategoriesPage = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data ? data.map((data, index) => {
+                                    {data ? data.filter((item) => {
+                                        if (searchTerm === '') {
+                                            return item;
+                                        } else if (item.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+                                            return item;
+                                        }
+                                    }).map((data, index) => {
                                         return (
-                                            <tr>
+                                            <tr key={index}>
                                                 <td><img src={data.imageURL} style={{ width: '50px' }} /></td>
                                                 <td>
                                                     <strong>{data.name}</strong>

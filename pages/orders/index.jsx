@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContainerDefault from '~/components/layouts/ContainerDefault';
 import TableOrdersItems from '~/components/shared/tables/TableOrdersItems';
 import Pagination from '~/components/elements/basic/Pagination';
@@ -7,12 +7,19 @@ import Link from 'next/link';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
+import axios from 'axios';
 
 const { Option } = Select;
 const OrdersPage = () => {
+    const [searchTerm, setsearchTerm] = useState('');
+    const [order, setOrder] = useState([])
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(toggleDrawerMenu(false));
+        axios.get('http://localhost:8899/order-list').then((res) => {
+            console.log(res);
+            setOrder(res.data.result);
+        })
     }, []);
     return (
         <ContainerDefault>
@@ -33,9 +40,10 @@ const OrdersPage = () => {
                                         className="form-control"
                                         type="text"
                                         placeholder="Search..."
+                                        onChange={e => setsearchTerm(e.target.value)}
                                     />
                                 </div>
-                                <div className="form-group">
+                                {/* <div className="form-group">
                                     <Select
                                         placeholder="Status"
                                         className="ps-ant-dropdown"
@@ -45,14 +53,14 @@ const OrdersPage = () => {
                                             InActive
                                         </Option>
                                     </Select>
-                                </div>
+                                </div> */}
                             </div>
-                            <div className="ps-form__right">
+                            {/* <div className="ps-form__right">
                                 <button className="ps-btn ps-btn--gray">
                                     <i className="icon icon-funnel mr-2"></i>
                                     Filter
                                 </button>
-                            </div>
+                            </div> */}
                         </form>
                     </div>
                     <div className="ps-section__actions">
@@ -69,7 +77,7 @@ const OrdersPage = () => {
                     </div>
                 </div>
                 <div className="ps-section__content">
-                    <TableOrdersItems />
+                    <TableOrdersItems orderItems={order} search={searchTerm} />
                 </div>
                 <div className="ps-section__footer">
                     <p>Show 10 in 30 items.</p>

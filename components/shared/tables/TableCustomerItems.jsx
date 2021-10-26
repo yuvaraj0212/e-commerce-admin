@@ -2,17 +2,15 @@ import React,{useState, useEffect } from 'react';
 import DropdownAction from '~/components/elements/basic/DropdownAction';
 import axios from "axios";
 
-const TableCustomerItems = () => {
-    const [customers, setcustomers] = useState([]);
-    useEffect(() => {
-        axios.get("http://localhost:8899/user-list").then(res=>{
-            console.log(res.data);
-            setcustomers(res.data.result)
-    })
-    },[])
-    const tableItemsView = customers.map((item, index) => {
+const TableCustomerItems = ({customers,search}) => {
+    const tableItemsView = customers.filter((item)=>{
+        if (search==='') {
+            return item;
+        } else if (item.username.toLowerCase().includes(search.toLowerCase())) {
+            return item;
+        } 
+    }).map((item, index) => {
         let badgeView;
-
         if (item) {
             badgeView = <span className="ps-badge success">active</span>;
         } else {

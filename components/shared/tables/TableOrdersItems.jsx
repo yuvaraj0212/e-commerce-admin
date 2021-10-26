@@ -3,14 +3,14 @@ import Link from 'next/link';
 import axios from 'axios';
 
 
-const TableOrdersItems = () => {
-    const [orderItems, setOrderItems] = useState([])
-    useEffect(() => {
-        axios.get('http://localhost:8899/order-list').then((res) => {
-            console.log(res);
-            setOrderItems(res.data.result);
-        })
-    }, []);
+const TableOrdersItems = ({orderItems,search}) => {
+    // const [orderItems, setOrderItems] = useState([])
+    // useEffect(() => {
+    //     axios.get('http://localhost:8899/order-list').then((res) => {
+    //         console.log(res);
+    //         setOrderItems(res.data.result);
+    //     })
+    // }, []);
     // const orderItems = [
     //     {
     //         id: '#A580',
@@ -53,8 +53,14 @@ const TableOrdersItems = () => {
     //         total: '$30.00',
     //     },
     // ];
-
-    const tableItemsView = orderItems.map((item) => {
+    const tableItemsView = orderItems.filter((item)=>{
+        let productName=item.productModel
+        if (search==='') {
+            return item;
+        } else if (productName.name.toLowerCase().includes(search.toLowerCase())) {
+            return item;
+        } 
+    }).map((item) => {
         let badgeView, fullfillmentView;
         // const menuView = (
         //     <Menu>

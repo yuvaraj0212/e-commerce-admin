@@ -17,7 +17,7 @@ const HeaderDashboard = ({
                 <p>{description}</p>
             </div>
             <div className="header__center">
-                <FormHeaderSearch />
+                {/* <FormHeaderSearch /> */}
             </div>
             <div className="header__right">
                 <Link href="/login">

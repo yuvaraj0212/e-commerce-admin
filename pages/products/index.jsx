@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ContainerDefault from '~/components/layouts/ContainerDefault';
 import Pagination from '~/components/elements/basic/Pagination';
 import TableProjectItems from '~/components/shared/tables/TableProjectItems';
@@ -7,13 +7,25 @@ import Link from 'next/link';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
+import axios from 'axios';
 
 const { Option } = Select;
 const ProductPage = () => {
+    const [searchTerm, setsearchTerm] = useState('');
+    const [product, setProduct] = useState([]);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(toggleDrawerMenu(false));
     }, []);
+    useEffect(() => {
+        productList();
+    }, [])
+    const productList = () => {
+        axios.get("http://localhost:8899/product/product-list").then(res => {
+            console.log(res.data);
+            setProduct(res.data.result)
+        })
+    }
     return (
         <ContainerDefault title="Products">
             <HeaderDashboard
@@ -29,11 +41,11 @@ const ProductPage = () => {
                         </a>
                     </Link>
                 </div>
-                <div className="ps-section__header">
+                {/* <div className="ps-section__header">
                     <div className="ps-section__filter">
                         <form
                             className="ps-form--filter"
-                            action="index.html"
+                            // action="index.html"/
                             method="get">
                             <div className="ps-form__left">
                                 <div className="form-group">
@@ -49,6 +61,20 @@ const ProductPage = () => {
                                         </Option>
                                     </Select>
                                 </div>
+                                <form
+                                    className="ps-form--search-simple"
+                                    // action="index.html"
+                                    method="get">
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        placeholder="Search product"
+                                        onChange={e => setsearchTerm(e.target.value)}
+                                    />
+                                    <button>
+                                        <i className="icon icon-magnifier"></i>
+                                    </button>
+                                </form> 
                                 <div className="form-group">
                                     <Select
                                         placeholder="Select Category"
@@ -74,7 +100,7 @@ const ProductPage = () => {
                                     </Select>
                                 </div>
                             </div>
-                            <div className="ps-form__right">
+                             <div className="ps-form__right">
                                 <button className="ps-btn ps-btn--gray">
                                     <i className="icon icon-funnel mr-2"></i>
                                     Filter
@@ -85,12 +111,31 @@ const ProductPage = () => {
                     <div className="ps-section__search">
                         <form
                             className="ps-form--search-simple"
+                            // action="index.html"
+                            method="get">
+                            <input
+                                className="form-control"
+                                type="text"
+                                placeholder="Search product" 
+                                onChange={e=>setseacrchTerm(e.target.value)}
+                            />
+                            <button>
+                                <i className="icon icon-magnifier"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div> */}
+                <div className="ps-section__header simple">
+                    <div className="ps-section__filter">
+                        <form
+                            className="ps-form--search-simple"
                             action="index.html"
                             method="get">
                             <input
                                 className="form-control"
                                 type="text"
-                                placeholder="Search product"
+                                placeholder="Search..."
+                                onChange={e => setsearchTerm(e.target.value)}
                             />
                             <button>
                                 <i className="icon icon-magnifier"></i>
@@ -99,7 +144,7 @@ const ProductPage = () => {
                     </div>
                 </div>
                 <div className="ps-section__content">
-                    <TableProjectItems />
+                    <TableProjectItems productItems={product} search={searchTerm} />
                 </div>
                 <div className="ps-section__footer">
                     <p>Show 10 in 30 items.</p>
