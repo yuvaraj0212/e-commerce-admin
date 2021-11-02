@@ -150,7 +150,10 @@ class register extends Component {
                                                                         required: true,
                                                                         message:
                                                                             'Please input your password!',
-                                                                    },
+                                                                    },{
+                                                                        pattern:/^.{6,}$/,
+                                                                        message: `password contains at least Six characters`
+                                                                    }
                                                                 ]}>
                                                                 <Input
                                                                     className="form-control"

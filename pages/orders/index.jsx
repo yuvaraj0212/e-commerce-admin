@@ -28,22 +28,22 @@ const OrdersPage = () => {
                 description="Martfury Orders Listing"
             />
             <section className="ps-items-listing">
-                <div className="ps-section__header simple">
+                {/* <div className="ps-section__header simple">
                     <div className="ps-section__filter">
                         <form
                             className="ps-form--filter"
-                            action="index.html"
+
                             method="get">
                             <div className="ps-form__left">
                                 <div className="form-group">
-                                    <input
+                                 <input
                                         className="form-control"
                                         type="text"
                                         placeholder="Search..."
                                         onChange={e => setsearchTerm(e.target.value)}
-                                    />
+                                    /> 
                                 </div>
-                                {/* <div className="form-group">
+                                 <div className="form-group">
                                     <Select
                                         placeholder="Status"
                                         className="ps-ant-dropdown"
@@ -53,30 +53,36 @@ const OrdersPage = () => {
                                             InActive
                                         </Option>
                                     </Select>
-                                </div> */}
+                                </div> 
                             </div>
-                            {/* <div className="ps-form__right">
+                             <div className="ps-form__right">
                                 <button className="ps-btn ps-btn--gray">
                                     <i className="icon icon-funnel mr-2"></i>
                                     Filter
                                 </button>
-                            </div> */}
+                            </div> 
                         </form>
                     </div>
                     <div className="ps-section__actions">
-                        {/* <Link href="/products/create-product">
+                        { <Link href="/products/create-product">
                             <a className="ps-btn success">
                                 <i className="icon icon-plus mr-2"></i>New Order
                             </a>
-                        </Link> */}
+                        </Link> 
                         <a
                             className="ps-btn ps-btn--gray"
                             href="new-order.html">
                             <i className="icon icon-download2 mr-2"></i>Export
                         </a>
                     </div>
-                </div>
+                </div> */}
                 <div className="ps-section__content">
+                    {/* <div className="text-right pb-3">
+                        <a className="ps-btn ps-btn--gray ">
+                            <i className="icon icon-download2 mr-2"></i>Export
+                        </a>
+                    </div> */}
+
                     <TableOrdersItems orderItems={order} search={searchTerm} />
                 </div>
                 <div className="ps-section__footer">

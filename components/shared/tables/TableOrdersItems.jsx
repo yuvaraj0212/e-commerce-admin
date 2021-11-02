@@ -3,7 +3,7 @@ import Link from 'next/link';
 import axios from 'axios';
 
 
-const TableOrdersItems = ({orderItems,search}) => {
+const TableOrdersItems = ({ orderItems, search }) => {
     // const [orderItems, setOrderItems] = useState([])
     // useEffect(() => {
     //     axios.get('http://localhost:8899/order-list').then((res) => {
@@ -53,14 +53,29 @@ const TableOrdersItems = ({orderItems,search}) => {
     //         total: '$30.00',
     //     },
     // ];
-    const tableItemsView = orderItems.filter((item)=>{
-        let productName=item.productModel
-        if (search==='') {
-            return item;
-        } else if (productName.name.toLowerCase().includes(search.toLowerCase())) {
-            return item;
-        } 
+    var index = 0;
+    const tableItemsView = orderItems.filter((item) => {
+
+        // let productName = item.orders[0].productModel
+        // if (item.orders.length > 1) {
+        //     const orders = item.orders;
+        //     const exist = orders.map(({ productModel }) => {
+        //         if (search === '') {
+        //             return productModel;
+        //         } else if (productModel.name.toLowerCase().includes(search.toLowerCase())) {
+        //             return productModel;
+        //         }
+        //         return productModel;
+        //     })
+        // } else {
+            if (search === '') {
+                return item;
+            } else if (productName.name.toLowerCase().includes(search.toLowerCase())) {
+                return item;
+            }
+        // }
     }).map((item) => {
+
         let badgeView, fullfillmentView;
         // const menuView = (
         //     <Menu>
@@ -77,12 +92,12 @@ const TableOrdersItems = ({orderItems,search}) => {
         //         </Menu.Item>
         //     </Menu>
         // );
-        if (item.payment) {
+        if (item.status === true) {
             badgeView = <span className="ps-badge success">Paid</span>;
         } else {
             badgeView = <span className="ps-badge gray">Unpaid</span>;
         }
-        switch (item.fullfillment) {
+        switch (item.orderStatus) {
             case 'In Progress':
                 fullfillmentView = (
                     <span className="ps-fullfillment warning">In Progress</span>
@@ -93,18 +108,52 @@ const TableOrdersItems = ({orderItems,search}) => {
                     <span className="ps-fullfillment danger">Cancel</span>
                 );
                 break;
+            case "ordered":
+                fullfillmentView = (
+                    <span className="ps-fullfillment success">ordered</span>
+                );
+                break;
             default:
                 fullfillmentView = (
                     <span className="ps-fullfillment success">delivered</span>
                 );
                 break;
         }
-        return (
-            <tr key={item.id}>
-                <td>{item.id}</td>
-                <td><img src={item.productModel.imageURL} alt={item.productModel.code}  style={{ width: '50px' }}/> </td>
+
+        if (item.orders.length > 1) {
+            const orders = item.orders;
+            const product = orders.map(({ productModel }) => {
+                index = index + 1;
+                return (
+                    <tr key={productModel.id}>
+                        <td>{index}</td>
+                        <td><img src={productModel.imageURL} alt={productModel.code} style={{ width: '50px' }} /> </td>
+                        <td>
+                            <strong> {productModel.name}</strong>
+                        </td>
+                        <td>{badgeView}</td>
+                        <td>{fullfillmentView}</td>
+                        <td>
+                            {/* <Link href="/orders/order-detail"> */}
+                            {/* <a> */}
+                            {item.orderDate}
+                            {/* </a> */}
+                            {/* </Link> */}
+                        </td>
+                        <td>
+                            <strong>{item.amount}</strong>
+                        </td>
+
+                    </tr>)
+            });
+            return product;
+        } else {
+            index = index + 1;
+            return <tr key={index}>
+                <td>{index}</td>
+                <td><img src={item.orders[0].productModel.imageURL} alt={item.orders[0].productModel.code} style={{ width: '50px' }} /> </td>
                 <td>
-                    <strong> {item.productModel.name}</strong>
+                    <strong> {item.orders[0].productModel.name}</strong>
                 </td>
                 <td>{badgeView}</td>
                 <td>{fullfillmentView}</td>
@@ -116,18 +165,20 @@ const TableOrdersItems = ({orderItems,search}) => {
                     {/* </Link> */}
                 </td>
                 <td>
-                    <strong>{item.productModel.price}</strong>
+                    <strong>{item.amount}</strong>
                 </td>
 
             </tr>
-        );
+        }
+
     });
+    console.log(tableItemsView);
     return (
         <div className="table-responsive">
             <table className="table ps-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>No</th>
                         <th>Product</th>
                         <th>ProductName</th>
                         <th>Payment</th>
