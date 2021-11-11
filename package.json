@@ -6,9 +6,9 @@
         "name": "nouthemes"
     },
     "scripts": {
-        "dev": "next dev",
+        "dev": "next dev -p 8080",
         "build": "next build",
-        "start": "next start -p 3002"
+        "start": "next start -p 8080"
     },
     "dependencies": {
         "@zeit/next-sass": "^1.0.1",

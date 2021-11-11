@@ -144,12 +144,12 @@ const ProductPage = () => {
                     </div>
                 </div>
                 <div className="ps-section__content">
-                    <TableProjectItems productItems={product} search={searchTerm} />
+                    <TableProjectItems products={product} search={searchTerm} />
                 </div>
-                <div className="ps-section__footer">
+                {/* <div className="ps-section__footer">
                     <p>Show 10 in 30 items.</p>
                     <Pagination />
-                </div>
+                </div> */}
             </section>
         </ContainerDefault>
     );

@@ -168,7 +168,7 @@ const FormAccountSettings = () => {
                                 </Form.Item>
                             </div>
                             
-                            <div className="form-group">
+                            {/* <div className="form-group">
                                 <Form.Item
                                     name="address"
 
@@ -186,7 +186,7 @@ const FormAccountSettings = () => {
                                         placeholder="address"
                                     />
                                 </Form.Item>
-                            </div>
+                            </div> */}
 
                             <div className="form-group submit">
                                 <div className="ps-form__submit text-center">

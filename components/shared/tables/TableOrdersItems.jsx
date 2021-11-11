@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
-
+import moment from "moment";
 
 const TableOrdersItems = ({ orderItems, search }) => {
     // const [orderItems, setOrderItems] = useState([])
@@ -68,14 +68,14 @@ const TableOrdersItems = ({ orderItems, search }) => {
         //         return productModel;
         //     })
         // } else {
-            if (search === '') {
-                return item;
-            } else if (productName.name.toLowerCase().includes(search.toLowerCase())) {
-                return item;
-            }
+        if (search === '') {
+            return item;
+        } else if (productName.name.toLowerCase().includes(search.toLowerCase())) {
+            return item;
+        }
         // }
     }).map((item) => {
-
+        console.log(item);
         let badgeView, fullfillmentView;
         // const menuView = (
         //     <Menu>
@@ -122,7 +122,7 @@ const TableOrdersItems = ({ orderItems, search }) => {
 
         if (item.orders.length > 1) {
             const orders = item.orders;
-            const product = orders.map(({ productModel }) => {
+            const product = orders.map(({ productModel, quantity }) => {
                 index = index + 1;
                 return (
                     <tr key={productModel.id}>
@@ -136,12 +136,18 @@ const TableOrdersItems = ({ orderItems, search }) => {
                         <td>
                             {/* <Link href="/orders/order-detail"> */}
                             {/* <a> */}
-                            {item.orderDate}
+                            {moment(item.orderDate).format("MMMM Do YYYY, h:mm:ss a")}
                             {/* </a> */}
                             {/* </Link> */}
                         </td>
                         <td>
-                            <strong>{item.amount}</strong>
+                            <strong>
+                                <span>x{quantity}</span>
+                            </strong>{"  "}
+                        </td>
+
+                        <td className='text-center'>
+                            <b>₹{quantity * productModel.price}.00</b>
                         </td>
 
                     </tr>)
@@ -160,12 +166,17 @@ const TableOrdersItems = ({ orderItems, search }) => {
                 <td>
                     {/* <Link href="/orders/order-detail"> */}
                     {/* <a> */}
-                    {item.orderDate}
+                    {moment(item.orderDate).format("MMMM Do YYYY, h:mm:ss a")}
                     {/* </a> */}
                     {/* </Link> */}
                 </td>
                 <td>
-                    <strong>{item.amount}</strong>
+                    <strong>
+                        <span>x{item.orders[0].quantity}</span>
+                    </strong>{"  "}
+                </td>
+                <td className='text-center'>
+                    <b>₹{item.orders[0].quantity * item.orders[0].productModel.price}.00</b>
                 </td>
 
             </tr>
@@ -176,7 +187,7 @@ const TableOrdersItems = ({ orderItems, search }) => {
     return (
         <div className="table-responsive">
             <table className="table ps-table">
-                <thead>
+                <thead className='text-center'>
                     <tr>
                         <th>No</th>
                         <th>Product</th>
@@ -184,11 +195,12 @@ const TableOrdersItems = ({ orderItems, search }) => {
                         <th>Payment</th>
                         <th>Fullfillment</th>
                         <th>Date</th>
+                        <th>Quantity</th>
                         <th>Total</th>
-                        <th></th>
+                        {/* <th></th> */}
                     </tr>
                 </thead>
-                <tbody>{tableItemsView}</tbody>
+                <tbody className='text-center'>{tableItemsView}</tbody>
             </table>
         </div>
     );
