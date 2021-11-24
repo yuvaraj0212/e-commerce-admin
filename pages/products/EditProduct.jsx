@@ -5,7 +5,7 @@ import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
 import { Form, Input, notification, Button, Select, Upload } from 'antd';
-import axios from 'axios';
+import { getCatrgrylist, productUpdate } from '~/components/api/url-helper';
 
 
 
@@ -21,7 +21,7 @@ const editeProductPage = (props) => {
          setEditecategory(JSON.parse(sessionStorage.getItem("category")));
         setKey(JSON.parse(props.router.query.data));
         // setEditecategory(key.category);
-        axios.get('http://localhost:8899/category/category-list').then((res) => {
+        getCatrgrylist().then((res) => {
             console.log(res);
             setCategorylist(res.data.result);
 
@@ -54,12 +54,7 @@ const editeProductPage = (props) => {
         loginFormData.append("description", value.description);
         loginFormData.append("category", value.category);
         console.log(loginFormData);
-        axios({
-            method: 'post',
-            url: ' http://localhost:8899/product/update-product',
-            data: loginFormData,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then((res) => {
+        productUpdate(loginFormData).then((res) => {
             console.log(res);
             console.log(res.status);
             if (res.data.status === 200) {

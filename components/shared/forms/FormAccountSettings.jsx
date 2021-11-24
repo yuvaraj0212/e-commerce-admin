@@ -1,7 +1,6 @@
 import React, { Component, useEffect, useState } from 'react';
-import { getUser } from '../../api/url-helper';
+import { getUser, updateUser } from '../../api/url-helper';
 import { Form, Input, Button, notification, Avatar, Upload } from 'antd';
-import axios from 'axios';
 import { UserOutlined } from '@ant-design/icons';
 import router from 'next/router';
 // class FormAccountSettings extends Component {
@@ -34,7 +33,7 @@ const FormAccountSettings = () => {
         values.password = data.password;
         console.log(values);
         try {
-            axios.post("http://localhost:8899/update-user", values)
+            updateUser(values)
                 .then((res) => {
                     console.log(res);
                     console.log(res.status);
@@ -167,7 +166,7 @@ const FormAccountSettings = () => {
                                     />
                                 </Form.Item>
                             </div>
-                            
+
                             {/* <div className="form-group">
                                 <Form.Item
                                     name="address"

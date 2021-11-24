@@ -55,9 +55,9 @@ import { toggleDrawerMenu } from "~/store/app/action";
 import {
     EditTwoTone, DeleteTwoTone, ExclamationCircleOutlined
 } from '@ant-design/icons';
-import Axios from "axios";
 import moment from "moment";
 import { Form, Input, notification, Divider, Tooltip, Modal, Upload, Button } from 'antd';
+import { createCategory, deleteCategory, getCatrgrylist, updateCategory } from "~/components/api/url-helper";
 // import TextArea from "rc-textarea";
 
 
@@ -81,11 +81,7 @@ const CategoriesPage = () => {
         getCourseAllContent();
     }, []);
     const getCourseAllContent = async () => {
-        Axios.get("http://localhost:8899/category/category-list", {
-            //   headers: {
-            //     'Authorization': baseurl.AuthToken,
-            //   }
-        }).then((res) => {
+        getCatrgrylist().then((res) => {
             // this.setState({
             //   data: res.data.result,
             // });
@@ -98,13 +94,8 @@ const CategoriesPage = () => {
         loginFormData.append("name", value.name);
         loginFormData.append("desc", value.desc);
         loginFormData.append("mfile", value.mfile.file.originFileObj);
-        // Axios.post("http://localhost:8899/category/create-category", value)
-        Axios({
-            method: 'post',
-            url: 'http://localhost:8899/category/create-category',
-            data: loginFormData,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(
+        
+        createCategory(loginFormData).then(
             (res) => {
 
                 console.log(res.data.status)
@@ -150,12 +141,7 @@ const CategoriesPage = () => {
         loginFormData.append("desc", value.desc);
         loginFormData.append("mfile", value.mfile.file.originFileObj);
         console.log("edite cate  ", value);
-        Axios({
-            method: 'post',
-            url: 'http://localhost:8899/category/update-category',
-            data: loginFormData,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then(
+        updateCategory(loginFormData).then(
             (res) => {
                 console.log(res);
                 if (res.data.status === 200) {
@@ -188,9 +174,8 @@ const CategoriesPage = () => {
             okType: 'danger',
             cancelText: 'No',
             onOk() {
-                Axios.delete("http://localhost:8899/category/delete-category?categoryId=" + id, {
-
-                }).then((res) => {
+                deleteCategory(id)
+                .then((res) => {
                     if (res.data.status === 200) {
                         getCourseAllContent();
                         notification.success({

@@ -1,6 +1,6 @@
 import React,{useState, useEffect } from 'react';
 import DropdownAction from '~/components/elements/basic/DropdownAction';
-import axios from "axios";
+
 
 const TableCustomerItems = ({customers,search}) => {
     const tableItemsView = customers.filter((item)=>{

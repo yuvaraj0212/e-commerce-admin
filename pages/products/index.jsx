@@ -7,7 +7,7 @@ import Link from 'next/link';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
-import axios from 'axios';
+import { getProductList } from '~/components/api/url-helper';
 
 const { Option } = Select;
 const ProductPage = () => {
@@ -21,7 +21,7 @@ const ProductPage = () => {
         productList();
     }, [])
     const productList = () => {
-        axios.get("http://localhost:8899/product/product-list").then(res => {
+        getProductList().then(res => {
             console.log(res.data);
             setProduct(res.data.result)
         })

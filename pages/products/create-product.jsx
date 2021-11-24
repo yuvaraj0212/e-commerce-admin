@@ -5,7 +5,7 @@ import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
 import { Form, Input, notification, Button, Select, Upload } from 'antd';
-import axios from 'axios';
+import { getCatrgrylist, productCreate } from '~/components/api/url-helper';
 
 
 const CreateProductPage = () => {
@@ -13,7 +13,7 @@ const CreateProductPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(toggleDrawerMenu(false));
-        axios.get('http://localhost:8899/category/category-list').then((res) => {
+        getCatrgrylist().then((res) => {
             console.log(res);
             setCategorylist(res.data.result);
         })
@@ -30,12 +30,7 @@ const CreateProductPage = () => {
         loginFormData.append("description", value.description);
         loginFormData.append("category", value.category);
         console.log(loginFormData);
-        axios({
-            method: 'post',
-            url: 'http://localhost:8899/product/create-product',
-            data: loginFormData,
-            headers: { 'Content-Type': 'multipart/form-data' }
-        }).then((res) => {
+        productCreate(loginFormData).then((res) => {
             console.log(res);
             console.log(res.status);
             if (res.data.status === 200) {

@@ -1,16 +1,60 @@
 
 import axios from "axios";
 
-export const registerUser = (data) => axios.post("http://localhost:8899/signup",data);
+const baseUrl = 'http://13.127.52.182/pandiyanstores';
 
-export const getToken = (data) => axios.post("http://localhost:8899/signin",data);
+export const registerUser = (data) => axios.post(`${baseUrl}/signup`, data);
 
-export const getListuser = () => axios.get("http://localhost:8899/user-list");
+export const getToken = (data) => axios.post(`${baseUrl}/signin`, data);
 
-export const getUser = (id) => axios.get("http://localhost:8899/current-user",id);
+export const pagination = (payload) =>axios.get(`${baseUrl}/product/pagination/?pageNo=${payload}&pageSize=${12}`)
 
-export const getCatrgrylist = () =>axios.get("http://localhost:8899/category/category-list");
+export const getListuser = () => axios.get(`${baseUrl}/user-list`);
 
-export const forgotpassword = (data) => axios.get('http://localhost:8899/forget-password',{ params: data} );
+export const productCreate = (loginFormData) =>axios({
+    method: 'post',
+    url: `${baseUrl}/product/create-product`,
+    data: loginFormData,
+    headers: { 'Content-Type': 'multipart/form-data' }
+})
 
-export const Resetps = (data) => axios.post(`http://localhost:8899/reset-password/${data.emailId}`,data.password,data.confirmPassword );
+export const productDelete = (data) =>axios({
+    method: 'delete',
+    url: `${baseUrl}/product/delete-product?productId=`+ data,
+})
+export const productUpdate = (loginFormData) =>axios({
+    method: 'post',
+    url: `${baseUrl}/product/update-product`,
+    data: loginFormData,
+    headers: { 'Content-Type': 'multipart/form-data' }
+})
+
+export const createCategory = (loginFormData) =>axios({
+    method: 'post',
+    url: `${baseUrl}/category/create-category`,
+    data: loginFormData,
+    headers: { 'Content-Type': 'multipart/form-data' }
+})
+
+export const updateCategory = (loginFormData) =>axios({
+    method: 'post',
+    url: `${baseUrl}/category/update-category`,
+    data: loginFormData,
+    headers: { 'Content-Type': 'multipart/form-data' }
+})
+
+export const orderList = () => axios.get('http://localhost:8899/order-list');
+
+export const deleteCategory = (id) => axios.delete(`${baseUrl}/category/delete-category?categoryId=` + id, )
+
+export const updateUser = (values) =>axios.post(`${baseUrl}/update-user`, values)
+
+export const getUser = (id) => axios.get(`${baseUrl}/current-user`, id);
+
+export const getCatrgrylist = () => axios.get(`${baseUrl}/category/category-list`);
+
+export const forgotpassword = (data) => axios.get(`${baseUrl}/forget-password`, { params: data });
+
+export const Resetps = (data) => axios.post(`${baseUrl}/reset-password/${data.emailId}`, data);
+
+export const getProductList = () => axios.get(`${baseUrl}/product/product-list`);

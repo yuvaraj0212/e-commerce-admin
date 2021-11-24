@@ -6,7 +6,7 @@ import FormSearchSimple from '~/components/shared/forms/FormSearchSimple';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
-import axios from 'axios';
+import { getListuser } from '~/components/api/url-helper';
 
 const CustomersPage = () => {
     const [searchTerm, setsearchTerm] = useState('');
@@ -14,7 +14,7 @@ const CustomersPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(toggleDrawerMenu(false));
-        axios.get("http://localhost:8899/user-list").then(res=>{
+        getListuser().then(res=>{
             console.log(res.data);
             setcustomer(res.data.result)
     })

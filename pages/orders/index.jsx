@@ -7,7 +7,7 @@ import Link from 'next/link';
 import HeaderDashboard from '~/components/shared/headers/HeaderDashboard';
 import { connect, useDispatch } from 'react-redux';
 import { toggleDrawerMenu } from '~/store/app/action';
-import axios from 'axios';
+import { orderList } from '~/components/api/url-helper';
 
 const { Option } = Select;
 const OrdersPage = () => {
@@ -16,7 +16,7 @@ const OrdersPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(toggleDrawerMenu(false));
-        axios.get('http://localhost:8899/order-list').then((res) => {
+        orderList().then((res) => {
             console.log(res);
             setOrder(res.data.result);
         })
