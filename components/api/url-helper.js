@@ -1,7 +1,7 @@
 
 import axios from "axios";
 
-const baseUrl = 'http://13.127.52.182/pandiyanstores';
+const baseUrl = 'http://13.235.132.111/pandiyanstores';
 
 export const registerUser = (data) => axios.post(`${baseUrl}/signup`, data);
 
