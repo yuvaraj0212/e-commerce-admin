@@ -43,7 +43,7 @@ export const updateCategory = (loginFormData) =>axios({
     headers: { 'Content-Type': 'multipart/form-data' }
 })
 
-export const orderList = () => axios.get('http://localhost:8899/order-list');
+export const orderList = () => axios.get(`${baseUrl}/order-list`);
 
 export const deleteCategory = (id) => axios.delete(`${baseUrl}/category/delete-category?categoryId=` + id, )
 
